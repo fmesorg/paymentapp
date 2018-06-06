@@ -1,6 +1,5 @@
 deploy:
-	-mkdir /Library/WebServer/Documents/paymentapp
-	-rm /Library/WebServer/Documents/paymentapp/*.php
-	-rm /Library/WebServer/Documents/paymentapp/*.html
-	-rm /Library/WebServer/Documents/paymentapp/*.js
-	cp *.php *.html *.js /Library/WebServer/Documents/paymentapp/
+	ssh fmes "rm -f /var/www/html/ijmewp/paymentapp/*.php"
+	ssh fmes "rm -f /var/www/html/ijmewp/paymentapp/*.html"
+	ssh fmes "rm -f /var/www/html/ijmewp/paymentapp/*.js"
+	scp *.php *.html *.js fmes:/var/www/html/ijmewp/paymentapp/
