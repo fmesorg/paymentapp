@@ -1,15 +1,105 @@
 <html>
 <head>
     <script type="text/javascript" src="moment.js"></script>
+    <script type="text/javascript" src="lodash-min.js"></script>
+    <script type="text/javascript" src="registrationDetails.js"></script>
     <script>
         var baseServerURL = 'http://ijme.in/paymentapp/';
+        var registrationDetails = registrationDetails();
 
-        var setElementValue = function(id, value) {
+        var setElementValue = function (id, value) {
             document.getElementById(id).value = value;
         };
 
-        var setElementValueWithURL = function(id, value) {
+        var setElementValueWithURL = function (id, value) {
             setElementValue(id, baseServerURL + value);
+        };
+
+        var addOption = function (text, selectElement) {
+            var option = document.createElement("option");
+            option.text = text;
+            selectElement.add(option);
+        };
+
+        var clearAllOptions = function (selectElement) {
+            for (var i = selectElement.length - 1; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        };
+
+        var pastTheDate = function (dateString) {
+            if (_.isEmpty(dateString)) return false;
+            return moment().isAfter(new Date(dateString));
+        };
+
+        var displayDependentOptions = function (dependeeElementName, dependentElementName, dependeePropertyName, dependentPropertyName) {
+            var dependeeElement = document.getElementById(dependeeElementName);
+            var dependentElement = document.getElementById(dependentElementName);
+            clearAllOptions(dependentElement);
+            addOption('Select', dependentElement);
+            _.uniqBy(_.filter(registrationDetails, function (item) {
+                return item[dependeePropertyName] === dependeeElement.options[dependeeElement.selectedIndex].text && !pastTheDate(item["Uptil"]);
+            }), function (item) {
+                return item[dependentPropertyName];
+            }).forEach(function (item) {
+                addOption(item[dependentPropertyName], dependentElement);
+            });
+        };
+
+        var displayFixedOptions = function (elementId, propertyName) {
+            var selectElement = document.getElementById(elementId);
+            addOption('Select', selectElement);
+            _.uniqBy(registrationDetails, function (item) {
+                return item[propertyName];
+            }).forEach(function (item) {
+                addOption(item[propertyName], selectElement);
+            });
+        };
+
+        var isValueSelected = function (elementId) {
+            return document.getElementById(elementId).selectedIndex !== 0;
+        };
+
+        var getSelectedValue = function (elementId) {
+            var element = document.getElementById(elementId);
+            return element.value;
+        };
+
+        var congressSelected = function () {
+            displayDependentOptions("congress", "registrationType", "Congress", "Registration type");
+        };
+
+        var setAmountIfAllRegistrationInputSelected = function () {
+            if (isValueSelected("congress") && isValueSelected("registrationType") && isValueSelected("participantType") && isValueSelected("location") && isValueSelected("currency")) {
+                var congress = getSelectedValue("congress");
+                var registrationType = getSelectedValue("registrationType");
+                var participantType = getSelectedValue("participantType");
+                var location = getSelectedValue("location");
+                var registrationDetail = _.find(registrationDetails, function (item) {
+                    return item["Congress"] === congress && item["Registration type"] === registrationType && item["Participant"] === participantType && item["Location"] === location;
+                });
+
+                var currency = getSelectedValue("currency");
+                document.getElementById("amount").value = currency === 'INR' ? registrationDetail["Fees-Rs"] : registrationDetail["Fees-USD"];
+            } else {
+                document.getElementById("amount").value = '';
+            }
+        };
+
+        var registrationTypeSelected = function () {
+            setAmountIfAllRegistrationInputSelected();
+        };
+
+        var participantTypeSelected = function () {
+            setAmountIfAllRegistrationInputSelected();
+        };
+
+        var locationTypeSelected = function () {
+            setAmountIfAllRegistrationInputSelected();
+        };
+
+        var currencySelected = function () {
+            setAmountIfAllRegistrationInputSelected();
         };
 
         window.onload = function () {
@@ -17,6 +107,14 @@
             setElementValue("order_id", '00000000000000' + moment().format('YYYYMMDDhhmmssss'));
             setElementValueWithURL('redirect_url', 'ccavResponseHandler.php');
             setElementValueWithURL('cancel_url', 'ccavResponseHandler.php');
+
+            displayFixedOptions("congress", "Congress");
+            displayFixedOptions("participantType", "Participant");
+            displayFixedOptions("location", "Location");
+            var selectElement = document.getElementById("currency");
+            addOption('Select', selectElement);
+            addOption('INR', selectElement);
+            addOption('USD', selectElement);
         };
     </script>
 </head>
@@ -26,6 +124,40 @@
         <caption><font size="4" color="blue"><b>Integration Kit</b></font></caption>
     </table>
     <table width="40%" height="100" border='1' align="center">
+        <tr>
+            <td>Please choose Congress type</td>
+            <td>
+                <select id="congress" name="congress" onchange="congressSelected()"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Please choose Registration type</td>
+            <td>
+                <select id="registrationType" name="registrationType" onchange="registrationTypeSelected()"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Please choose your Participation type</td>
+            <td>
+                <select id="participantType" name="participantType" onchange="participantTypeSelected()"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Please choose your location</td>
+            <td>
+                <select id="location" name="location" onchange="locationTypeSelected()"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Currency :</td>
+            <td>
+                <select id="currency" name="currency" onchange="currencySelected()"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Amount :</td>
+            <td><input type="text" name="amount" id="amount" readonly/></td>
+        </tr>
         <tr>
             <td>TX Id :</td>
             <td><input type="text" name="tid" id="tid"/></td>
@@ -37,14 +169,6 @@
         <tr>
             <td>Order Id :</td>
             <td><input type="text" name="order_id" id="order_id"/></td>
-        </tr>
-        <tr>
-            <td>Amount :</td>
-            <td><input type="text" name="amount" value="1.00"/></td>
-        </tr>
-        <tr>
-            <td>Currency :</td>
-            <td><input type="text" name="currency" value="INR"/></td>
         </tr>
         <tr>
             <td>Redirect URL :</td>
@@ -94,32 +218,32 @@
             <td><input type="text" name="billing_email" value="test@test.com"/></td>
         </tr>
         <!--<tr>-->
-            <!--<td>Merchant Param1 :</td>-->
-            <!--<td><input type="text" name="merchant_param1" value=""/></td>-->
+        <!--<td>Merchant Param1 :</td>-->
+        <!--<td><input type="text" name="merchant_param1" value=""/></td>-->
         <!--</tr>-->
         <!--<tr>-->
-            <!--<td>Merchant Param2 :</td>-->
-            <!--<td><input type="text" name="merchant_param2" value=""/></td>-->
+        <!--<td>Merchant Param2 :</td>-->
+        <!--<td><input type="text" name="merchant_param2" value=""/></td>-->
         <!--</tr>-->
         <!--<tr>-->
-            <!--<td>Merchant Param3 :</td>-->
-            <!--<td><input type="text" name="merchant_param3" value=""/></td>-->
+        <!--<td>Merchant Param3 :</td>-->
+        <!--<td><input type="text" name="merchant_param3" value=""/></td>-->
         <!--</tr>-->
         <!--<tr>-->
-            <!--<td>Merchant Param4 :</td>-->
-            <!--<td><input type="text" name="merchant_param4" value=""/></td>-->
+        <!--<td>Merchant Param4 :</td>-->
+        <!--<td><input type="text" name="merchant_param4" value=""/></td>-->
         <!--</tr>-->
         <!--<tr>-->
-            <!--<td>Merchant Param5 :</td>-->
-            <!--<td><input type="text" name="merchant_param5" value=""/></td>-->
+        <!--<td>Merchant Param5 :</td>-->
+        <!--<td><input type="text" name="merchant_param5" value=""/></td>-->
         <!--</tr>-->
         <!--<tr>-->
-            <!--<td>Promo Code :</td>-->
-            <!--<td><input type="text" name="promo_code" value=""/></td>-->
+        <!--<td>Promo Code :</td>-->
+        <!--<td><input type="text" name="promo_code" value=""/></td>-->
         <!--</tr>-->
         <!--<tr>-->
-            <!--<td>Vault Info. :</td>-->
-            <!--<td><input type="text" name="customer_identifier" value=""/></td>-->
+        <!--<td>Vault Info. :</td>-->
+        <!--<td><input type="text" name="customer_identifier" value=""/></td>-->
         <!--</tr>-->
         <tr>
             <td>Integration Type :</td>
