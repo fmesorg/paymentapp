@@ -127,31 +127,31 @@
         <tr>
             <td>Please choose Congress type</td>
             <td>
-                <select id="congress" name="congress" onchange="congressSelected()"></select>
+                <select id="congress" name="merchant_param1" onchange="congressSelected()"></select>
             </td>
         </tr>
         <tr>
             <td>Please choose Registration type</td>
             <td>
-                <select id="registrationType" name="registrationType" onchange="registrationTypeSelected()"></select>
+                <select id="registrationType" name="merchant_param2" onchange="registrationTypeSelected()"></select>
             </td>
         </tr>
         <tr>
             <td>Please choose your Participation type</td>
             <td>
-                <select id="participantType" name="participantType" onchange="participantTypeSelected()"></select>
+                <select id="participantType" name="merchant_param3" onchange="participantTypeSelected()"></select>
             </td>
         </tr>
         <tr>
             <td>Please choose your location</td>
             <td>
-                <select id="location" name="location" onchange="locationTypeSelected()"></select>
+                <select id="location" name="merchant_param4" onchange="locationTypeSelected()"></select>
             </td>
         </tr>
         <tr>
             <td>Currency :</td>
             <td>
-                <select id="currency" name="currency" onchange="currencySelected()"></select>
+                <select id="currency" name="merchant_param5" onchange="currencySelected()"></select>
             </td>
         </tr>
         <tr>
@@ -159,31 +159,7 @@
             <td><input type="text" name="amount" id="amount" readonly/></td>
         </tr>
         <tr>
-            <td>TX Id :</td>
-            <td><input type="text" name="tid" id="tid"/></td>
-        </tr>
-        <tr>
-            <td>Merchant Id :</td>
-            <td><input type="text" name="merchant_id" value="146983" hidden/></td>
-        </tr>
-        <tr>
-            <td>Order Id :</td>
-            <td><input type="text" name="order_id" id="order_id"/></td>
-        </tr>
-        <tr>
-            <td>Redirect URL :</td>
-            <td><input type="text" name="redirect_url" id="redirect_url"/></td>
-        </tr>
-        <tr>
-            <td>Cancel URL :</td>
-            <td><input type="text" name="cancel_url" id="cancel_url"/></td>
-        </tr>
-        <tr>
-            <td>Language :</td>
-            <td><input type="text" name="language" value="en"/></td>
-        </tr>
-        <tr>
-            <td colspan="2">Billing information (optional):</td>
+            <td colspan="2">Billing information (all fields mandatory):</td>
         </tr>
         <tr>
             <td>Billing Name :</td>
@@ -246,14 +222,17 @@
         <!--<td><input type="text" name="customer_identifier" value=""/></td>-->
         <!--</tr>-->
         <tr>
-            <td>Integration Type :</td>
-            <td><input type="text" name="integration_type" value="iframe_normal"/></td>
-        </tr>
-        <tr>
             <td></td>
             <td><INPUT TYPE="submit" value="CheckOut"></td>
         </tr>
     </table>
+    <input type="text" name="language" value="en" hidden/>
+    <input type="text" name="integration_type" value="iframe_normal" hidden/>
+    <input type="text" name="redirect_url" id="redirect_url" hidden/>
+    <input type="text" name="cancel_url" id="cancel_url" hidden/>
+    <input type="text" name="tid" id="tid" hidden/>
+    <input type="text" name="merchant_id" value="146983" hidden/>
+    <input type="text" name="order_id" id="order_id" hidden/>
 </form>
 </body>
 </html>
