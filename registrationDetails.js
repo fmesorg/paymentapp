@@ -38,39 +38,39 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB Main",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of Congress",
             "Participant": "Regular",
             "Location": "India or low/middle income country",
             "Fees-Rs": 2700,
             "Fees-USD": 40,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "WCB Main",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of Congress",
             "Participant": "Student/Journalist",
             "Location": "India or low/middle income country",
             "Fees-Rs": 1400,
             "Fees-USD": 20,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "WCB Main",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of Congress",
             "Participant": "Regular",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 15000,
             "Fees-USD": 225,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "WCB Main",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of Congress",
             "Participant": "Student/Journalist",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 8000,
             "Fees-USD": 115,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "WCB Main",
@@ -110,7 +110,7 @@ function registrationDetails() {
         },
         {
             "Congress": "FAB Congress",
-            "Registration type": "3 days of FAB ",
+            "Registration type": "3 days of FAB",
             "Participant": "Regular",
             "Location": "India or low/middle income country",
             "Fees-Rs": 3500,
@@ -119,7 +119,7 @@ function registrationDetails() {
         },
         {
             "Congress": "FAB Congress",
-            "Registration type": "3 days of FAB ",
+            "Registration type": "3 days of FAB",
             "Participant": "Student/Journalist",
             "Location": "India or low/middle income country",
             "Fees-Rs": 1750,
@@ -128,7 +128,7 @@ function registrationDetails() {
         },
         {
             "Congress": "FAB Congress",
-            "Registration type": "3 days of FAB ",
+            "Registration type": "3 days of FAB",
             "Participant": "Regular",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 18000,
@@ -137,7 +137,7 @@ function registrationDetails() {
         },
         {
             "Congress": "FAB Congress",
-            "Registration type": "3 days of FAB ",
+            "Registration type": "3 days of FAB",
             "Participant": "Student/Journalist",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 9000,
@@ -146,39 +146,39 @@ function registrationDetails() {
         },
         {
             "Congress": "FAB Congress",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of FAB",
             "Participant": "Regular",
             "Location": "India or low/middle income country",
             "Fees-Rs": 2500,
             "Fees-USD": 40,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "FAB Congress",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of FAB",
             "Participant": "Student/Journalist",
             "Location": "India or low/middle income country",
             "Fees-Rs": 1250,
             "Fees-USD": 20,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "FAB Congress",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of FAB",
             "Participant": "Regular",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 14000,
             "Fees-USD": 215,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "FAB Congress",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of FAB",
             "Participant": "Student/Journalist",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 7000,
             "Fees-USD": 110,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "FAB Congress",
@@ -254,43 +254,43 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of WCB+ 2 days of FAB",
             "Participant": "Regular",
             "Location": "India or low/middle income country",
             "Fees-Rs": 5000,
             "Fees-USD": 75,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of WCB+ 2 days of FAB",
             "Participant": "Student/Journalist",
             "Location": "India or low/middle income country",
             "Fees-Rs": 2500,
             "Fees-USD": 40,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of WCB+ 2 days of FAB",
             "Participant": "Regular",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 28000,
             "Fees-USD": 430,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "Early bird registration",
+            "Registration type": "3 days of WCB+ 2 days of FAB",
             "Participant": "Student/Journalist",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 14000,
             "Fees-USD": 215,
-            "Uptil": "2018-09-16"
+            "Uptil": "EarlyBird"
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "One day regsitration(1 day of WCB + 1 day of FAB) ",
+            "Registration type": "One day regsitration(1 day of WCB + 1 day of FAB)",
             "Participant": "Regular",
             "Location": "India or low/middle income country",
             "Fees-Rs": 2000,
@@ -299,7 +299,7 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "One day regsitration(1 day of WCB + 1 day of FAB) ",
+            "Registration type": "One day regsitration(1 day of WCB + 1 day of FAB)",
             "Participant": "Student/Journalist",
             "Location": "India or low/middle income country",
             "Fees-Rs": 1000,
@@ -308,7 +308,7 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "One day regsitration(1 day of WCB + 1 day of FAB) ",
+            "Registration type": "One day regsitration(1 day of WCB + 1 day of FAB)",
             "Participant": "Regular",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 10700,
@@ -317,7 +317,7 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "One day regsitration(1 day of WCB + 1 day of FAB) ",
+            "Registration type": "One day regsitration(1 day of WCB + 1 day of FAB)",
             "Participant": "Student/Journalist",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 5500,
