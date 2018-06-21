@@ -4,6 +4,10 @@
     <script type="text/javascript" src="lodash-min.js"></script>
     <script type="text/javascript" src="registrationDetails.js"></script>
     <script type="text/javascript" src="countries.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
     <script>
         var baseServerURL = 'http://ijme.in/paymentapp/';
         var registrationDetails = registrationDetails();
@@ -106,7 +110,7 @@
                 });
 
                 var currency = getSelectedValue("currency");
-                document.getElementById("amount").value = currency === 'INR' ? registrationDetail["Fees-Rs"] : registrationDetail["Fees-USD"];
+                document.getElementById("amount").value = currency === 'INR' ? (Number(registrationDetail["Fees-Rs"]) * 1.02 * 1.18).toFixed(2) : (Number(registrationDetail["Fees-USD"]) * 1.0499 * 1.18).toFixed(2);
             } else {
                 document.getElementById("amount").value = '';
             }
@@ -128,6 +132,12 @@
             setAmountIfAllRegistrationInputSelected();
         };
 
+        var updatePhoneNumber = function () {
+            var isd = document.getElementById("isd_code");
+            var phoneNumber = document.getElementById("phone_number");
+            document.getElementById("billing_tel").value = isd.value + phoneNumber.value;
+        };
+
         window.onload = function () {
             setElementValue('tid', moment().format('YYMMDDhhmmss'));
             setElementValue("order_id", '00000000000000' + moment().format('YYYYMMDDhhmmssss'));
@@ -146,63 +156,84 @@
     </script>
 </head>
 <body>
-<form method="post" name="customerData" action="ccavRequestHandler.php">
-    <table width="40%" height="100" border='1' align="center">
-        <caption><font size="4" color="blue"><b>Integration Kit</b></font></caption>
-    </table>
-    <table width="40%" height="100" border='1' align="center">
+<br/>
+<center>
+    <div>
+        <img alt="world-congress-of-bioethics-logo" src="http://ijme.in/nbc-20140321/custom/img/14-world-congress-of-bioethics-logo.jpg" style="{float: left}">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img alt="NBC Logo" src="http://ijme.in/nbc-20140321/custom/img/nbc-logo.jpg">
+    </div>
+</center>
+<br/>
+<br/>
+<center>
+    <h1>Please provide your details below</h1></center>
+<form method="post" name="customerData" action="ccavRequestHandler.php" role="form">
+    <table width="60%" height="100" align="center" border="1" bgcolor="#7fffd4">
         <tr>
-            <td>Please choose Congress type</td>
+            <td colspan="2">
+                <center><b>Congress details</b></center>
+            </td>
+        </tr>
+        <tr>
+            <td>Please choose your congress type</td>
             <td>
                 <select id="congress" name="merchant_param1" onchange="congressSelected()"></select>
             </td>
         </tr>
         <tr>
-            <td>Please choose Registration type</td>
+            <td>Please choose your registration type</td>
             <td>
                 <select id="registrationType" name="merchant_param2" onchange="registrationTypeSelected()"></select>
             </td>
         </tr>
         <tr>
-            <td>Please choose your Participation type</td>
+            <td>Please choose your participation type</td>
             <td>
                 <select id="participantType" name="merchant_param3" onchange="participantTypeSelected()"></select>
             </td>
         </tr>
         <tr>
-            <td colspan="2">Billing information (all fields mandatory):</td>
+            <td colspan="2">
+                <center><b>Billing information (all fields mandatory)</b></center>
+            </td>
         </tr>
         <tr>
             <td>Name :</td>
-            <td><input type="text" name="billing_name" value="Charlie"/></td>
+            <td><input type="text" name="billing_name" value="" size="30"/></td>
         </tr>
         <tr>
             <td>Address :</td>
-            <td><input type="text" name="billing_address" value="Room no 1101, near Railway station Ambad"/></td>
+            <td><input type="text" name="billing_address" value="" size="30"/></td>
         </tr>
         <tr>
             <td>City :</td>
-            <td><input type="text" name="billing_city" value="Ahmedabad"/></td>
+            <td><input type="text" name="billing_city" value="" size="30"/></td>
         </tr>
         <tr>
             <td>State :</td>
-            <td><input type="text" name="billing_state" value="Gujarat"/></td>
+            <td><input type="text" name="billing_state" value="" size="30"/></td>
         </tr>
         <tr>
-            <td>Zip :</td>
-            <td><input type="text" name="billing_zip" value="382120"/></td>
+            <td>Zip/Postal code :</td>
+            <td><input type="text" name="billing_zip" value="" size="30"/></td>
         </tr>
         <tr>
             <td>Country :</td>
             <td><select id="country" name="billing_country" onchange="countrySelected()"></select></td>
         </tr>
         <tr>
-            <td>Tel :</td>
-            <td><input type="text" name="billing_tel" value="9999999999"/></td>
+            <td>Telephone :</td>
+            <td>
+                <span>+</span>
+                <input type="text" name="isd_code" value="" id="isd_code" oninput="updatePhoneNumber()" size="2"/>
+                <input type="text" name="phone_number" id="phone_number" oninput="updatePhoneNumber()" size="12"/>
+                <input type="text" name="billing_tel" id="billing_tel" hidden/>
+            </td>
         </tr>
         <tr>
             <td>Email :</td>
-            <td><input type="text" name="billing_email" value="test@test.com"/></td>
+            <td><input type="text" name="billing_email" value="" size="30"/></td>
         </tr>
         <tr>
             <td>Currency :</td>
@@ -212,13 +243,11 @@
         </tr>
         <tr>
             <td>Amount :</td>
-            <td><input type="text" name="amount" id="amount" readonly/></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><INPUT TYPE="submit" value="CheckOut"></td>
+            <td><input type="text" name="amount" id="amount" readonly style="background-color: #7fffd4; border: 0"/></td>
         </tr>
     </table>
+    <br/>
+    <center><INPUT TYPE="submit" value="Proceed to payment" class="btn btn-primary btn-lg"></center>
     <input type="text" name="language" value="en" hidden/>
     <input type="text" name="integration_type" value="iframe_normal" hidden/>
     <input type="text" name="redirect_url" id="redirect_url" hidden/>
