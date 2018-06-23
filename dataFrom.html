@@ -79,6 +79,10 @@
             return document.getElementById(elementId).selectedIndex !== 0;
         };
 
+        var hasValue = function (elementId) {
+            return getSelectedValue(elementId) !== '';
+        };
+
         var getSelectedValue = function (elementId) {
             var element = document.getElementById(elementId);
             return element.value;
@@ -98,8 +102,16 @@
             return (findCountry(countryList["low"], country) || findCountry(countryList["low-middle"], country)) ? "India or low/middle income country" : "Upper middle and high income country";
         };
 
+        var arePaymentFieldsSelected = function() {
+            return isValueSelected("congress") && isValueSelected("registrationType") && isValueSelected("participantType") && isValueSelected("country") && isValueSelected("currency");
+        };
+
+        var areNonPaymentFieldsSelected = function () {
+            return hasValue("billing_name") && hasValue("billing_address") && hasValue("billing_city") && hasValue("billing_state") && hasValue("billing_zip") && hasValue("isd_code") && hasValue("phone_number");
+        };
+
         var setAmountIfAllRegistrationInputSelected = function () {
-            if (isValueSelected("congress") && isValueSelected("registrationType") && isValueSelected("participantType") && isValueSelected("country") && isValueSelected("currency")) {
+            if (arePaymentFieldsSelected()) {
                 var congress = getSelectedValue("congress");
                 var registrationType = getSelectedValue("registrationType");
                 var participantType = getSelectedValue("participantType");
@@ -111,8 +123,10 @@
 
                 var currency = getSelectedValue("currency");
                 document.getElementById("amount").value = currency === 'INR' ? (Number(registrationDetail["Fees-Rs"]) * 1.02 * 1.18).toFixed(2) : (Number(registrationDetail["Fees-USD"]) * 1.0499 * 1.18).toFixed(2);
+                setSubmitButtonState(areNonPaymentFieldsSelected());
             } else {
                 document.getElementById("amount").value = '';
+                setSubmitButtonState(false);
             }
         };
 
@@ -136,6 +150,16 @@
             var isd = document.getElementById("isd_code");
             var phoneNumber = document.getElementById("phone_number");
             document.getElementById("billing_tel").value = isd.value + phoneNumber.value;
+            enableSubmitIfAllFilled();
+        };
+
+        var enableSubmitIfAllFilled = function() {
+            setSubmitButtonState(arePaymentFieldsSelected() && areNonPaymentFieldsSelected());
+        };
+
+        var setSubmitButtonState = function(enabled) {
+            var submitButton = document.getElementById('submit');
+            submitButton.disabled = !enabled;
         };
 
         window.onload = function () {
@@ -152,6 +176,7 @@
             addOption('USD', selectElement);
 
             displayCountries();
+            setSubmitButtonState(false);
         };
     </script>
 </head>
@@ -200,23 +225,23 @@
         </tr>
         <tr>
             <td>Name :</td>
-            <td><input type="text" name="billing_name" value="" size="30"/></td>
+            <td><input type="text" id="billing_name" name="billing_name" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
         </tr>
         <tr>
             <td>Address :</td>
-            <td><input type="text" name="billing_address" value="" size="30"/></td>
+            <td><input type="text" id="billing_address" name="billing_address" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
         </tr>
         <tr>
             <td>City :</td>
-            <td><input type="text" name="billing_city" value="" size="30"/></td>
+            <td><input type="text" id="billing_city" name="billing_city" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
         </tr>
         <tr>
             <td>State :</td>
-            <td><input type="text" name="billing_state" value="" size="30"/></td>
+            <td><input type="text" id="billing_state" name="billing_state" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
         </tr>
         <tr>
             <td>Zip/Postal code :</td>
-            <td><input type="text" name="billing_zip" value="" size="30"/></td>
+            <td><input type="text" id="billing_zip" name="billing_zip" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
         </tr>
         <tr>
             <td>Country :</td>
@@ -233,7 +258,7 @@
         </tr>
         <tr>
             <td>Email :</td>
-            <td><input type="text" name="billing_email" value="" size="30"/></td>
+            <td><input type="text" id="billing_email" name="billing_email" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
         </tr>
         <tr>
             <td>Currency :</td>
@@ -247,7 +272,7 @@
         </tr>
     </table>
     <br/>
-    <center><INPUT TYPE="submit" value="Proceed to payment" class="btn btn-primary btn-lg"></center>
+    <center><INPUT TYPE="submit" id="submit" value="Proceed to payment" class="btn btn-primary btn-lg"></center>
     <input type="text" name="language" value="en" hidden/>
     <input type="text" name="integration_type" value="iframe_normal" hidden/>
     <input type="text" name="redirect_url" id="redirect_url" hidden/>
