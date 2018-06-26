@@ -10,10 +10,12 @@ $order_status = "";
 $decryptValues = explode('&', $rcvdString);
 $dataSize = sizeof($decryptValues);
 echo "<center>";
-echo "<div>
+echo "<div style='background-color: gray()'>
+        <br/>
         <img alt=\"world-congress-of-bioethics-logo\" src=\"http://ijme.in/nbc-20140321/custom/img/14-world-congress-of-bioethics-logo.jpg\" style=\"{float: left}\">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <img alt=\"NBC Logo\" src=\"http://ijme.in/nbc-20140321/custom/img/nbc-logo.jpg\">
+        <br/>
     </div>";
 
 for ($i = 0; $i < $dataSize; $i++) {
@@ -23,8 +25,7 @@ for ($i = 0; $i < $dataSize; $i++) {
 }
 
 if ($order_status === "Success") {
-    echo "<br><b>Thank you for paying for the registration. Your credit/debit card has been charged and your transaction is successful. Please fill up the registration form below.</b>";
-    echo "<iframe src=\"https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?embedded=true\" width=\"800\" height=\"1000\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\">Loading...</iframe>";
+    echo "<br><b>Thank you for paying for the registration. Your credit/debit card has been charged and your transaction is successful. Please fill up the <a href='https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?usp=sf_link' target='_blank'>registration form</a>.</b>";
 } else if ($order_status === "Aborted") {
     echo "<br><b>Thank you for paying for the registration. We will keep you posted regarding the status of your order through e-mail</b>";
 } else if ($order_status === "Failure") {
@@ -43,5 +44,10 @@ for ($i = 0; $i < $dataSize; $i++) {
 }
 
 echo "</table><br>";
+
+if ($order_status === "Success") {
+//    echo "<iframe src=\"https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?embedded=true\" width=\"700\" height=\"520\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\">Loading...</iframe>";
+}
+
 echo "</center>";
 ?>
