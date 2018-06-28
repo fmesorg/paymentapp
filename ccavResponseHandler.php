@@ -25,7 +25,8 @@ for ($i = 0; $i < $dataSize; $i++) {
 }
 
 if ($order_status === "Success") {
-    echo "<br><b>Thank you for paying for the registration. Your credit/debit card has been charged and your transaction is successful. Please fill up the <a href='https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?usp=sf_link' target='_blank'>registration form</a>.</b>";
+    echo "<br><b>Thank you for paying for the registration. Your credit/debit card has been charged and your transaction is successful.</b>";
+    echo "<br><b>Please fill up the registration form <a href='https://docs.google.com/forms/d/e/1FAIpQLSfNjRxkh7CdlneRlnKsiy80muw26bYzWdnTxH7KfSDnij59WQ/viewform?usp=sf_link' target='_blank'>Pre/Post Congress sessions</a> or <a href='https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?usp=sf_link' target='_blank'>Main Congress and FAB</a>.</b>";
 } else if ($order_status === "Aborted") {
     echo "<br><b>Thank you for paying for the registration. We will keep you posted regarding the status of your order through e-mail</b>";
 } else if ($order_status === "Failure") {

@@ -122,7 +122,13 @@
                 });
 
                 var currency = getSelectedValue("currency");
-                document.getElementById("amount").value = currency === 'INR' ? (Number(registrationDetail["Fees-Rs"]) * 1.02 * 1.18).toFixed(2) : (Number(registrationDetail["Fees-USD"]) * 1.0499 * 1.18).toFixed(2);
+                var registrationFees = currency === 'INR' ? Number(registrationDetail["Fees-Rs"]) : Number(registrationDetail["Fees-USD"]);
+                var transactionFees = currency === 'INR' ? (registrationFees * 0.02) : (registrationFees * 0.0499);
+                var gst = transactionFees * 0.18;
+                var total = registrationFees + transactionFees + gst;
+                document.getElementById("registrationAmount").value = registrationFees.toFixed(2);
+                document.getElementById("feesAndTax").value = (transactionFees + gst).toFixed(2);
+                document.getElementById("amount").value = total.toFixed(2);
                 setSubmitButtonState(areNonPaymentFieldsSelected());
             } else {
                 document.getElementById("amount").value = '';
@@ -267,7 +273,15 @@
             </td>
         </tr>
         <tr>
-            <td>Amount :</td>
+            <td>Registration amount :</td>
+            <td><input type="text" name="registrationAmount" id="registrationAmount" readonly style="background-color: #7fffd4; border: 0"/></td>
+        </tr>
+        <tr>
+            <td>Transaction fees and GST :</td>
+            <td><input type="text" name="feesAndTax" id="feesAndTax" readonly style="background-color: #7fffd4; border: 0"/></td>
+        </tr>
+        <tr>
+            <td>Total amount :</td>
             <td><input type="text" name="amount" id="amount" readonly style="background-color: #7fffd4; border: 0"/></td>
         </tr>
     </table>
