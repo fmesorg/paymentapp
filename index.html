@@ -107,7 +107,7 @@
         };
 
         var areNonPaymentFieldsSelected = function () {
-            return hasValue("billing_name") && hasValue("billing_address") && hasValue("billing_city") && hasValue("billing_state") && hasValue("billing_zip") && hasValue("isd_code") && hasValue("phone_number");
+            return hasValue("billing_name") && hasValue("billing_address") && hasValue("billing_city") && hasValue("billing_state") && hasValue("billing_zip") && hasValue("phone_number");
         };
 
         var setAmountIfAllRegistrationInputSelected = function () {
@@ -153,9 +153,8 @@
         };
 
         var updatePhoneNumber = function () {
-            var isd = document.getElementById("isd_code");
             var phoneNumber = document.getElementById("phone_number");
-            document.getElementById("billing_tel").value = isd.value + phoneNumber.value;
+            document.getElementById("billing_tel").value = phoneNumber.value;
             enableSubmitIfAllFilled();
         };
 
@@ -257,8 +256,7 @@
             <td>Telephone :</td>
             <td>
                 <span>+</span>
-                <input type="text" name="isd_code" value="" id="isd_code" oninput="updatePhoneNumber()" size="2"/>
-                <input type="text" name="phone_number" id="phone_number" oninput="updatePhoneNumber()" size="12"/>
+                <input type="text" name="phone_number" id="phone_number" oninput="updatePhoneNumber()" size="15"/>
                 <input type="text" name="billing_tel" id="billing_tel" hidden/>
             </td>
         </tr>

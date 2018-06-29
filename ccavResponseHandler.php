@@ -1,3 +1,10 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
 <?php include('Crypto.php') ?>
 <?php include('accessDetails.php') ?>
 <?php
@@ -9,6 +16,7 @@ $rcvdString = decrypt($encResponse, $workingKey);        //Crypto Decryption use
 $order_status = "";
 $decryptValues = explode('&', $rcvdString);
 $dataSize = sizeof($decryptValues);
+
 echo "<center>";
 echo "<div style='background-color: gray()'>
         <br/>
@@ -26,7 +34,8 @@ for ($i = 0; $i < $dataSize; $i++) {
 
 if ($order_status === "Success") {
     echo "<br><b>Thank you for paying for the registration. Your credit/debit card has been charged and your transaction is successful.</b>";
-    echo "<br><b>Please fill up the registration form <a href='https://docs.google.com/forms/d/e/1FAIpQLSfNjRxkh7CdlneRlnKsiy80muw26bYzWdnTxH7KfSDnij59WQ/viewform?usp=sf_link' target='_blank'>Pre/Post Congress sessions</a> or <a href='https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?usp=sf_link' target='_blank'>Main Congress and FAB</a>.</b>";
+    echo "<br/><br/><br/><p style='font-size: 30px'><a href='https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?usp=sf_link' target='_blank'>Please fill up the registration form for Main Congress and FAB</a><br/>IMPORTANT: Please fill up the registration form (Main Congress and FAB form) to complete your registration.  
+Please note that the registration will only be confirmed upon successful completion of this form.</p>";
 } else if ($order_status === "Aborted") {
     echo "<br><b>Thank you for paying for the registration. We will keep you posted regarding the status of your order through e-mail</b>";
 } else if ($order_status === "Failure") {
@@ -37,6 +46,10 @@ if ($order_status === "Success") {
 
 echo "<br><br>";
 
+if ($order_status === "Success") {
+    echo '<p><b>You payment details</b></p>';
+}
+
 echo "<table cellspacing=4 cellpadding=4>";
 for ($i = 0; $i < $dataSize; $i++) {
     $information = explode('=', $decryptValues[$i]);
@@ -46,9 +59,7 @@ for ($i = 0; $i < $dataSize; $i++) {
 
 echo "</table><br>";
 
-if ($order_status === "Success") {
-//    echo "<iframe src=\"https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?embedded=true\" width=\"700\" height=\"520\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\">Loading...</iframe>";
-}
 
 echo "</center>";
 ?>
+</html>
