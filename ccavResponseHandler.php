@@ -33,9 +33,8 @@ for ($i = 0; $i < $dataSize; $i++) {
 }
 
 if ($order_status === "Success") {
-    echo "<br><b>Thank you for paying for the registration. Your credit/debit card has been charged and your transaction is successful.</b>";
-    echo "<br/><br/><br/><p style='font-size: 30px'><a href='https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?usp=sf_link' target='_blank'>Please fill up the registration form for Main Congress and FAB</a><br/>IMPORTANT: Please fill up the registration form (Main Congress and FAB form) to complete your registration.  
-Please note that the registration will only be confirmed upon successful completion of this form.</p>";
+    echo "<br><b>Thank you for paying for the registration. Your transaction is successful.</b>";
+    echo "<br/><br/><br/><p style='font-size: 30px'><a href='https://docs.google.com/forms/d/e/1FAIpQLSeSKFNF1suEnIW6iTv5NEB0m2KFNHhnB832ZenDbDAGME7esw/viewform?usp=sf_link' target='_blank'><b>CLICK HERE</b></a> to fill up the registration form for Main Congress and FAB Congress<br/>IMPORTANT:  Please note that the registration will only be confirmed upon successful completion of this form.</p>";
 } else if ($order_status === "Aborted") {
     echo "<br><b>Thank you for paying for the registration. We will keep you posted regarding the status of your order through e-mail</b>";
 } else if ($order_status === "Failure") {
