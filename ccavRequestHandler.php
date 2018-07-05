@@ -20,7 +20,7 @@
 
     $encrypted_data = encrypt($merchant_data, $working_key); // Method for encrypting the data.
 
-    $production_url = 'https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction&encRequest=' . $encrypted_data . '&access_code=' . $access_code;
+    $production_url = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction&encRequest=' . $encrypted_data . '&access_code=' . $access_code;
     ?>
     <iframe src="<?php echo $production_url ?>" id="paymentFrame" width="482" height="450" frameborder="0" scrolling="No"></iframe>
 
@@ -36,4 +36,3 @@
 </center>
 </body>
 </html>
-

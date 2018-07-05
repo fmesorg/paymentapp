@@ -122,11 +122,18 @@
                 });
 
                 var currency = getSelectedValue("currency");
-                var registrationFees = currency === 'INR' ? Number(registrationDetail["Fees-Rs"]) : Number(registrationDetail["Fees-USD"]);
-                var transactionFees = currency === 'INR' ? (registrationFees * 0.02) : (registrationFees * 0.0499);
+                // ExpectedAmount = TotalAmount - 0.02 * TotalAmount - 0.02 * 0.18 * TotalAmount
+                // ExpectedAmount = TotalAmount * (1 - 0.02 - 0.0036)
+                // TotalAmount = ExpectedAmount / (1 - 0.02 - 0.0036)
+                // Fees = ExpectedAmount * (0.02) / (1 - 0.02 - 0.0036)
+                // GST = ExpectedAmount * (0.02 * 0.18) / (1 - 0.02 - 0.0036)
+                var txFeePercentage = currency === 'INR' ? 0.02 : 0.0499;
+                var expectedAmount = currency === 'INR' ? registrationDetail["Fees-Rs"] : Number(registrationDetail["Fees-USD"]);
+
+                var total = calculateTotal(expectedAmount, txFeePercentage);
+                var transactionFees = calculateTxFee(expectedAmount, txFeePercentage);
                 var gst = transactionFees * 0.18;
-                var total = registrationFees + transactionFees + gst;
-                document.getElementById("registrationAmount").value = registrationFees.toFixed(2);
+                document.getElementById("registrationAmount").value = expectedAmount.toFixed(2);
                 document.getElementById("feesAndTax").value = (transactionFees + gst).toFixed(2);
                 document.getElementById("amount").value = total.toFixed(2);
                 setSubmitButtonState(areNonPaymentFieldsSelected());
@@ -134,6 +141,16 @@
                 document.getElementById("amount").value = '';
                 setSubmitButtonState(false);
             }
+        };
+
+        var calculateTotal = function(expectedAmount, txFeePercentage) {
+            var number = expectedAmount / (1 - txFeePercentage - (txFeePercentage * 0.18));
+            return Number(number);
+        };
+
+        var calculateTxFee = function (expectedAmount, txFeePercent) {
+            var number = (expectedAmount * txFeePercent) / (1 - txFeePercent - (txFeePercent * 0.18));
+            return Number(number);
         };
 
         var registrationTypeSelected = function () {
@@ -280,7 +297,7 @@
         </tr>
         <tr>
             <td>Total amount :</td>
-            <td><input type="text" name="amount" id="amount" readonly style="background-color: #D3D3D3; border: 0"/></td>
+            <td><input type="text" name="amount" id="amount" style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
     </table>
     <br/>
