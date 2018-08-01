@@ -1,0 +1,31 @@
+Payment Amount = p
+Our Amount, we want to get = a
+Payment gateway fee rate = 0.02
+
+GST = 0.18
+Payment gateway fee rate = pgfr
+Fees charged by payment gateway = pgf
+GST charged on payment gateway fees = gst_pgf
+GST charged to FMES = gst_fmes
+
+p = a + (p * 0.02) + (p * 0.02 * 0.18) + (a * 0.18)
+p = a * 1.18 + p * 0.02 * (1 + 0.18)
+p = a * 1.18 + p * 0.02 * 1.18
+p = a * 1.18 + p * 0.0236
+p - p * 0.0236 = a * 1.18
+p * (1 -  0.0236) = a * 1.18
+p = (a * 1.18) / (0.9764)
+
+p = (100 * 1.18) / 0.9764
+p = 120.85
+
+
+
+p = a + (p * pgfr) + (p * pgfr * 0.18) + (a * 0.18)
+p * (1 - pgfr * (1 + 0.18)) = a * 1.18
+p * (1 - (pgfr * 1.18)) = a * 1.18
+
+p = (a * 1.18) / (1 - (pgfr * 0.82));
+pgf = p * pgfr;
+gst_pgf = p * pgfr * 0.18;
+gst_fmes = a * 0.18;

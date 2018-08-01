@@ -122,20 +122,19 @@
                 });
 
                 var currency = getSelectedValue("currency");
-                // ExpectedAmount = TotalAmount - 0.02 * TotalAmount - 0.02 * 0.18 * TotalAmount
-                // ExpectedAmount = TotalAmount * (1 - 0.02 - 0.0036)
-                // TotalAmount = ExpectedAmount / (1 - 0.02 - 0.0036)
-                // Fees = ExpectedAmount * (0.02) / (1 - 0.02 - 0.0036)
-                // GST = ExpectedAmount * (0.02 * 0.18) / (1 - 0.02 - 0.0036)
                 var txFeePercentage = currency === 'INR' ? 0.02 : 0.0499;
                 var expectedAmount = currency === 'INR' ? registrationDetail["Fees-Rs"] : Number(registrationDetail["Fees-USD"]);
 
                 var total = calculateTotal(expectedAmount, txFeePercentage);
-                var transactionFees = calculateTxFee(expectedAmount, txFeePercentage);
-                var gst = transactionFees * 0.18;
+                var ccAvenueTxFees = calculateTxFee(total, txFeePercentage);
+                var gstCCAvenueTxFees = Number(ccAvenueTxFees * 0.18);
+                var fmesGST = Number(expectedAmount * 0.18);
                 document.getElementById("registrationAmount").value = expectedAmount.toFixed(2);
-                document.getElementById("feesAndTax").value = (transactionFees + gst).toFixed(2);
+                document.getElementById("fmesGST").value = fmesGST.toFixed(2);
+                document.getElementById("txFeesGST").value = gstCCAvenueTxFees.toFixed(2);
+                document.getElementById("txFee").value = ccAvenueTxFees.toFixed(2);
                 document.getElementById("amount").value = total.toFixed(2);
+
                 setSubmitButtonState(areNonPaymentFieldsSelected());
             } else {
                 document.getElementById("amount").value = '';
@@ -144,13 +143,12 @@
         };
 
         var calculateTotal = function(expectedAmount, txFeePercentage) {
-            var number = expectedAmount / (1 - txFeePercentage - (txFeePercentage * 0.18));
+            var number = (expectedAmount * 1.18) / (1 - (txFeePercentage * 1.18));
             return Number(number);
         };
 
-        var calculateTxFee = function (expectedAmount, txFeePercent) {
-            var number = (expectedAmount * txFeePercent) / (1 - txFeePercent - (txFeePercent * 0.18));
-            return Number(number);
+        var calculateTxFee = function (totalAmount, txFeePercent) {
+            return Number(totalAmount * txFeePercent);
         };
 
         var registrationTypeSelected = function () {
@@ -292,11 +290,19 @@
             <td><input type="text" name="registrationAmount" id="registrationAmount" readonly style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
         <tr>
-            <td>Transaction fees and GST :</td>
-            <td><input type="text" name="feesAndTax" id="feesAndTax" readonly style="background-color: #D3D3D3; border: 0"/></td>
+            <td>FMES - GST:</td>
+            <td><input type="text" name="fmesGST" id="fmesGST" readonly style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
         <tr>
-            <td>Total amount :</td>
+            <td>CCAvenue Transaction fees - GST :</td>
+            <td><input type="text" name="txFeesGST" id="txFeesGST" readonly style="background-color: #D3D3D3; border: 0"/></td>
+        </tr>
+        <tr>
+            <td>CCAvenue Transaction fees :</td>
+            <td><input type="text" name="txFee" id="txFee" readonly style="background-color: #D3D3D3; border: 0"/></td>
+        </tr>
+        <tr>
+            <td>Total amount:</td>
             <td><input type="text" name="amount" id="amount" style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
     </table>
