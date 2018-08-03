@@ -39,7 +39,7 @@
         };
 
         var isApplicable = function (item) {
-            return (_.isEmpty(item["Uptil"]) && !pastEarlyBirdTheDate()) || (!_.isEmpty(item["Uptil"]) && pastEarlyBirdTheDate());
+            return pastEarlyBirdTheDate() ? _.isEmpty(item["Uptil"]) : !_.isEmpty(item["Uptil"]);
         };
 
         var displayDependentOptions = function (dependeeElementName, dependentElementName, dependeePropertyName, dependentPropertyName) {
@@ -128,7 +128,7 @@
                 var total = calculateTotal(expectedAmount, txFeePercentage);
                 var ccAvenueTxFees = calculateTxFee(total, txFeePercentage);
                 var gstCCAvenueTxFees = Number(ccAvenueTxFees * 0.18);
-                var fmesGST = Number(expectedAmount * 0.18);
+                var fmesGST = Number(total - (expectedAmount + ccAvenueTxFees + gstCCAvenueTxFees));
                 document.getElementById("registrationAmount").value = expectedAmount.toFixed(2);
                 document.getElementById("fmesGST").value = fmesGST.toFixed(2);
                 document.getElementById("txFeesGST").value = gstCCAvenueTxFees.toFixed(2);
@@ -143,7 +143,7 @@
         };
 
         var calculateTotal = function(expectedAmount, txFeePercentage) {
-            var number = (expectedAmount * 1.18) / (1 - (txFeePercentage * 1.18));
+            var number = (expectedAmount * 1.18) / (1 - (txFeePercentage * 1.3924));
             return Number(number);
         };
 
@@ -285,24 +285,24 @@
                 <select id="currency" name="currency" onchange="currencySelected()"></select>
             </td>
         </tr>
-        <tr>
+        <tr hidden>
             <td>Registration amount :</td>
-            <td><input type="text" name="registrationAmount" id="registrationAmount" readonly style="background-color: #D3D3D3; border: 0"/></td>
+            <td><input type="text" name="registrationAmount" id="registrationAmount" style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
-        <tr>
+        <tr hidden>
             <td>FMES - GST:</td>
-            <td><input type="text" name="fmesGST" id="fmesGST" readonly style="background-color: #D3D3D3; border: 0"/></td>
+            <td><input type="text" name="fmesGST" id="fmesGST" style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
-        <tr>
+        <tr hidden>
             <td>CCAvenue Transaction fees - GST :</td>
-            <td><input type="text" name="txFeesGST" id="txFeesGST" readonly style="background-color: #D3D3D3; border: 0"/></td>
+            <td><input type="text" name="txFeesGST" id="txFeesGST" style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
-        <tr>
+        <tr hidden>
             <td>CCAvenue Transaction fees :</td>
-            <td><input type="text" name="txFee" id="txFee" readonly style="background-color: #D3D3D3; border: 0"/></td>
+            <td><input type="text" name="txFee" id="txFee" style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
         <tr>
-            <td>Total amount:</td>
+            <td>Total amount (inclusive of payment gateway charges & 18% GST):</td>
             <td><input type="text" name="amount" id="amount" style="background-color: #D3D3D3; border: 0"/></td>
         </tr>
     </table>
