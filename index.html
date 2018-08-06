@@ -39,6 +39,7 @@
         };
 
         var isApplicable = function (item) {
+            if (_.startsWith(item["Registration type"], 'One day registration')) return true;
             return pastEarlyBirdTheDate() ? _.isEmpty(item["Uptil"]) : !_.isEmpty(item["Uptil"]);
         };
 
@@ -90,6 +91,7 @@
 
         var congressSelected = function () {
             displayDependentOptions("congress", "registrationType", "Congress", "Registration type");
+            setAmountIfAllRegistrationInputSelected();
         };
 
         var findCountry = function (array, country) {
@@ -278,6 +280,10 @@
         <tr>
             <td>Email :</td>
             <td><input type="text" id="billing_email" name="billing_email" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
+        </tr>
+        <tr>
+            <td>GST Number (mandatory for Indians) :</td>
+            <td><input type="text" id="delivery_address" name="delivery_address" value="" size="15"/></td>
         </tr>
         <tr>
             <td>Currency :</td>
