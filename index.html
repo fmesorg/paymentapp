@@ -85,13 +85,13 @@
         };
 
         var getSelectedValue = function (elementId) {
-            var element = document.getElementById(elementId);
-            return element.value;
+            return document.getElementById(elementId).value;
         };
 
         var congressSelected = function () {
             displayDependentOptions("congress", "registrationType", "Congress", "Registration type");
             setAmountIfAllRegistrationInputSelected();
+            setElementValue("delivery_city", document.getElementById("congress").value);
         };
 
         var findCountry = function (array, country) {
@@ -104,7 +104,7 @@
             return (findCountry(countryList["low"], country) || findCountry(countryList["low-middle"], country)) ? "India or low/middle income country" : "Upper middle and high income country";
         };
 
-        var arePaymentFieldsSelected = function() {
+        var arePaymentFieldsSelected = function () {
             return isValueSelected("congress") && isValueSelected("registrationType") && isValueSelected("participantType") && isValueSelected("country") && isValueSelected("currency");
         };
 
@@ -144,7 +144,7 @@
             }
         };
 
-        var calculateTotal = function(expectedAmount, txFeePercentage) {
+        var calculateTotal = function (expectedAmount, txFeePercentage) {
             var number = (expectedAmount * 1.18) / (1 - (txFeePercentage * 1.3924));
             return Number(number);
         };
@@ -162,10 +162,16 @@
         };
 
         var countrySelected = function () {
-            setAmountIfAllRegistrationInputSelected();
-        };
-
-        var currencySelected = function () {
+            var country = document.getElementById("country").value;
+            var currency;
+            if (country === "India") {
+                currency = "INR";
+            } else if (country === "Select") {
+                currency = "";
+            } else {
+                currency = "USD";
+            }
+            document.getElementById("currency").value = currency;
             setAmountIfAllRegistrationInputSelected();
         };
 
@@ -175,11 +181,11 @@
             enableSubmitIfAllFilled();
         };
 
-        var enableSubmitIfAllFilled = function() {
+        var enableSubmitIfAllFilled = function () {
             setSubmitButtonState(arePaymentFieldsSelected() && areNonPaymentFieldsSelected());
         };
 
-        var setSubmitButtonState = function(enabled) {
+        var setSubmitButtonState = function (enabled) {
             var submitButton = document.getElementById('submit');
             submitButton.disabled = !enabled;
         };
@@ -192,11 +198,6 @@
 
             displayFixedOptions("congress", "Congress");
             displayFixedOptions("participantType", "Participant");
-            var selectElement = document.getElementById("currency");
-            addOption('Select', selectElement);
-            addOption('INR', selectElement);
-            addOption('USD', selectElement);
-
             displayCountries();
             setSubmitButtonState(false);
         };
@@ -225,19 +226,19 @@
         <tr>
             <td>Please choose your congress type</td>
             <td>
-                <select id="congress" name="merchant_param1" onchange="congressSelected()"></select>
+                <select id="congress" name="delivery_city" onchange="congressSelected()"></select>
             </td>
         </tr>
         <tr>
             <td>Please choose your registration type</td>
             <td>
-                <select id="registrationType" name="merchant_param2" onchange="registrationTypeSelected()"></select>
+                <select id="registrationType" name="delivery_state" onchange="registrationTypeSelected()"></select>
             </td>
         </tr>
         <tr>
             <td>Please choose your participation type</td>
             <td>
-                <select id="participantType" name="merchant_param3" onchange="participantTypeSelected()"></select>
+                <select id="participantType" name="delivery_country" onchange="participantTypeSelected()"></select>
             </td>
         </tr>
         <tr>
@@ -288,7 +289,7 @@
         <tr>
             <td>Currency :</td>
             <td>
-                <select id="currency" name="currency" onchange="currencySelected()"></select>
+                <input type="text" name="currency" id="currency" readonly style="background-color: #D3D3D3; border: 0"/>
             </td>
         </tr>
         <tr hidden>
