@@ -13,6 +13,7 @@
         var registrationDetails = registrationDetails();
         var earlyBirdDate = '2018-10-16';
         var countryList = countries();
+        var emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
         var setElementValue = function (id, value) {
             document.getElementById(id).value = value;
@@ -109,7 +110,7 @@
         };
 
         var areNonPaymentFieldsSelected = function () {
-            return hasValue("billing_name") && hasValue("billing_address") && hasValue("billing_city") && hasValue("billing_state") && hasValue("billing_zip") && hasValue("phone_number");
+            return hasValue("billing_name") && hasValue("billing_address") && hasValue("billing_city") && hasValue("billing_state") && hasValue("billing_zip") && hasValue("phone_number") && emailValid();
         };
 
         var setAmountIfAllRegistrationInputSelected = function () {
@@ -189,6 +190,17 @@
             var submitButton = document.getElementById('submit');
             submitButton.disabled = !enabled;
         };
+
+        var emailValid = function () {
+            var email = document.getElementById('billing_email');
+            var string = email.value.trim();
+            return string.length === 0 || emailFilter.test(string);
+        };
+
+        function onEmailFocusOut() {
+            var email = document.getElementById('billing_email');
+            email.style.borderColor = emailValid() ? null : 'red';
+        }
 
         window.onload = function () {
             setElementValue('tid', moment().format('YYMMDDhhmmss'));
@@ -280,7 +292,7 @@
         </tr>
         <tr>
             <td>Email :</td>
-            <td><input type="text" id="billing_email" name="billing_email" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
+            <td><input type="text" id="billing_email" name="billing_email" value="" size="30" oninput="enableSubmitIfAllFilled()" onfocusout="onEmailFocusOut()"/></td>
         </tr>
         <tr>
             <td>GST No. (For Indian participants, please provide only if applicable) :</td>
