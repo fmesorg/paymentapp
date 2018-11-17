@@ -92,7 +92,7 @@
         var congressSelected = function () {
             displayDependentOptions("congress", "registrationType", "Congress", "Registration type");
             setAmountIfAllRegistrationInputSelected();
-            setElementValue("delivery_city", document.getElementById("congress").value);
+            setElementValue("congress", document.getElementById("congress").value);
         };
 
         var findCountry = function (array, country) {

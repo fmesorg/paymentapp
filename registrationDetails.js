@@ -290,7 +290,7 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "One day registration(1 day of WCB + 1 day of FAB)",
+            "Registration type": "1 day of WCB + 1 day of FAB",
             "Participant": "Regular",
             "Location": "India or low/middle income country",
             "Fees-Rs": 2000,
@@ -299,7 +299,7 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "One day registration(1 day of WCB + 1 day of FAB)",
+            "Registration type": "1 day of WCB + 1 day of FAB",
             "Participant": "Student/Journalist",
             "Location": "India or low/middle income country",
             "Fees-Rs": 1000,
@@ -308,7 +308,7 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "One day registration(1 day of WCB + 1 day of FAB)",
+            "Registration type": "1 day of WCB + 1 day of FAB",
             "Participant": "Regular",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 10700,
@@ -317,7 +317,7 @@ function registrationDetails() {
         },
         {
             "Congress": "WCB+FAB",
-            "Registration type": "One day registration(1 day of WCB + 1 day of FAB)",
+            "Registration type": "1 day of WCB + 1 day of FAB",
             "Participant": "Student/Journalist",
             "Location": "Upper middle and high income country",
             "Fees-Rs": 5500,
