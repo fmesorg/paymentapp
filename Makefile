@@ -12,4 +12,8 @@ deploy_html:
 deploy_js:
 	$(call _deploy,js)
 
+deploy_file:
+	ssh fmes "rm -f /var/www/html/ijmewp/paymentapp/$(file)"
+	scp $(file) fmes:/var/www/html/ijmewp/paymentapp/
+
 deploy: deploy_html deploy_js deploy_php

@@ -1,0 +1,284 @@
+<html>
+<head>
+    <script type="text/javascript" src="moment.js"></script>
+    <script type="text/javascript" src="lodash-min.js"></script>
+    <script type="text/javascript" src="registrationDetails.js"></script>
+    <script type="text/javascript" src="countries.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script>
+        var baseServerURL = 'http://ijme.in/paymentapp/';
+        var registrationDetails = registrationDetails();
+        var earlyBirdDate = '2018-11-16';
+        var countryList = countries();
+        var emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+        var setElementValue = function (id, value) {
+            document.getElementById(id).value = value;
+        };
+
+        var setElementValueWithURL = function (id, value) {
+            setElementValue(id, baseServerURL + value);
+        };
+
+        var addOption = function (text, selectElement) {
+            var option = document.createElement("option");
+            option.text = text;
+            selectElement.add(option);
+        };
+
+        var pastEarlyBirdTheDate = function () {
+            return moment().isAfter(new Date(earlyBirdDate));
+        };
+
+        var displayFixedOptions = function (elementId, propertyName) {
+            var selectElement = document.getElementById(elementId);
+            addOption('Select', selectElement);
+            _.uniqBy(registrationDetails, function (item) {
+                return item[propertyName];
+            }).forEach(function (item) {
+                addOption(item[propertyName], selectElement);
+            });
+        };
+
+        var displayCountries = function () {
+            var selectElement = document.getElementById("country");
+            addOption('Select', selectElement);
+            var allCountries = _.sortBy(countryList["low"].concat(countryList["low-middle"], countryList["upper-middle"], countryList["high"]));
+            allCountries.forEach(function (country) {
+                addOption(country, selectElement)
+            });
+        };
+
+        var isValueSelected = function (elementId) {
+            return document.getElementById(elementId).selectedIndex !== 0;
+        };
+
+        var hasValue = function (elementId) {
+            return getSelectedValue(elementId) !== '';
+        };
+
+        var getSelectedValue = function (elementId) {
+            return document.getElementById(elementId).value;
+        };
+
+        var findCountry = function (array, country) {
+            return array.find(function (item) {
+                return item === country;
+            });
+        };
+
+        var getLocationType = function (country) {
+            return (findCountry(countryList["low"], country) || findCountry(countryList["low-middle"], country)) ? "India or low/middle income country" : "Upper middle and high income country";
+        };
+
+        var arePaymentFieldsSelected = function () {
+            return isValueSelected("country") && isValueSelected("currency");
+        };
+
+        var areNonPaymentFieldsSelected = function () {
+            return hasValue("billing_name") && hasValue("billing_address") && hasValue("billing_city") && hasValue("billing_state") && hasValue("billing_zip") && hasValue("phone_number") && emailFilled();
+        };
+
+        var setAmountIfAllRegistrationInputSelected = function () {
+            if (arePaymentFieldsSelected()) {
+                var country = getSelectedValue("country");
+                var registrationAmount = getSelectedValue("registrationAmount");
+                var locationType = getLocationType(country);
+                var currency = getSelectedValue("currency");
+                var txFeePercentage = currency === 'INR' ? 0.02 : 0.0499;
+                var expectedAmount = Number(registrationAmount);
+
+                var total = calculateTotal(expectedAmount, txFeePercentage);
+                var ccAvenueTxFees = calculateTxFee(total, txFeePercentage);
+                var gstCCAvenueTxFees = Number(ccAvenueTxFees * 0.18);
+                var fmesGST = Number(total - (expectedAmount + ccAvenueTxFees + gstCCAvenueTxFees));
+                document.getElementById("fmesGST").value = fmesGST.toFixed(2);
+                document.getElementById("txFeesGST").value = gstCCAvenueTxFees.toFixed(2);
+                document.getElementById("txFee").value = ccAvenueTxFees.toFixed(2);
+                document.getElementById("amount").value = total.toFixed(2);
+
+                setSubmitButtonState(areNonPaymentFieldsSelected());
+            } else {
+                document.getElementById("amount").value = '';
+                setSubmitButtonState(false);
+            }
+        };
+
+        var calculateTotal = function (expectedAmount, txFeePercentage) {
+            var number = (expectedAmount * 1.18) / (1 - (txFeePercentage * 1.3924));
+            return Number(number);
+        };
+
+        var calculateTxFee = function (totalAmount, txFeePercent) {
+            return Number(totalAmount * txFeePercent);
+        };
+
+        var countrySelected = function () {
+            var country = document.getElementById("country").value;
+            var currency;
+            if (country === "India") {
+                currency = "INR";
+            } else if (country === "Select") {
+                currency = "";
+            } else {
+                currency = "USD";
+            }
+            document.getElementById("currency").value = currency;
+            setAmountIfAllRegistrationInputSelected();
+        };
+
+        var registrationAmountFilled = function() {
+            setAmountIfAllRegistrationInputSelected();
+            enableSubmitIfAllFilled();
+        };
+
+        var updatePhoneNumber = function () {
+            var phoneNumber = document.getElementById("phone_number");
+            document.getElementById("billing_tel").value = phoneNumber.value;
+            enableSubmitIfAllFilled();
+        };
+
+        var enableSubmitIfAllFilled = function () {
+            setSubmitButtonState(arePaymentFieldsSelected() && areNonPaymentFieldsSelected());
+        };
+
+        var setSubmitButtonState = function (enabled) {
+            var submitButton = document.getElementById('submit');
+            submitButton.disabled = !enabled;
+        };
+
+        var emailValid = function () {
+            var email = document.getElementById('billing_email');
+            var string = email.value.trim();
+            return string.length === 0 || emailFilter.test(string);
+        };
+
+        var emailFilled = function() {
+            var email = document.getElementById('billing_email');
+            var string = email.value.trim();
+            return emailValid() && string.length > 0;
+        };
+
+        function onEmailFocusOut() {
+            var email = document.getElementById('billing_email');
+            email.style.borderColor = emailValid() ? null : 'red';
+        }
+
+        window.onload = function () {
+            setElementValue('tid', moment().format('YYMMDDhhmmss'));
+            setElementValue("order_id", '00000000000000' + moment().format('YYYYMMDDhhmmssss'));
+            setElementValueWithURL('redirect_url', 'ccavResponseHandler.php');
+            setElementValueWithURL('cancel_url', 'ccavResponseHandler.php');
+
+            displayCountries();
+            setSubmitButtonState(false);
+        };
+    </script>
+</head>
+<body>
+<br/>
+<center>
+    <div>
+        <img alt="world-congress-of-bioethics-logo" src="http://ijme.in/nbc-20140321/custom/img/14-world-congress-of-bioethics-logo.jpg" style="{float: left}">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img alt="NBC Logo" src="http://ijme.in/nbc-20140321/custom/img/nbc-logo.jpg">
+    </div>
+</center>
+<br/>
+<br/>
+<center>
+    <h1>Please provide your details below</h1></center>
+<form method="post" name="customerData" action="ccavRequestHandler.php" role="form">
+    <table width="60%" height="100" align="center" border="1" bgcolor="#D3D3D3">
+        <tr>
+            <td colspan="2">
+                <center><b>Congress details</b></center>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <center><b>Billing information (all fields mandatory)</b></center>
+            </td>
+        </tr>
+        <tr>
+            <td>Name :</td>
+            <td><input type="text" id="billing_name" name="billing_name" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
+        </tr>
+        <tr>
+            <td>Address :</td>
+            <td><input type="text" id="billing_address" name="billing_address" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
+        </tr>
+        <tr>
+            <td>City :</td>
+            <td><input type="text" id="billing_city" name="billing_city" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
+        </tr>
+        <tr>
+            <td>State :</td>
+            <td><input type="text" id="billing_state" name="billing_state" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
+        </tr>
+        <tr>
+            <td>Zip/Postal code :</td>
+            <td><input type="text" id="billing_zip" name="billing_zip" value="" size="30" oninput="enableSubmitIfAllFilled()"/></td>
+        </tr>
+        <tr>
+            <td>Country :</td>
+            <td><select id="country" name="billing_country" onchange="countrySelected()"></select></td>
+        </tr>
+        <tr>
+            <td>Contact number (please include the country code):</td>
+            <td>
+                <span>+</span>
+                <input type="text" name="phone_number" id="phone_number" oninput="updatePhoneNumber()" size="15"/>
+                <input type="text" name="billing_tel" id="billing_tel" hidden/>
+            </td>
+        </tr>
+        <tr>
+            <td>Email :</td>
+            <td><input type="text" id="billing_email" name="billing_email" value="" size="30" oninput="enableSubmitIfAllFilled()" onfocusout="onEmailFocusOut()"/></td>
+        </tr>
+        <tr>
+            <td>GST No. (For Indian participants, please provide only if applicable) :</td>
+            <td><input type="text" id="delivery_address" name="delivery_address" value="" size="15"/></td>
+        </tr>
+        <tr>
+            <td>Currency :</td>
+            <td>
+                <input type="text" name="currency" id="currency" readonly style="background-color: #D3D3D3; border: 0"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Registration amount :</td>
+            <td><input type="number" name="registrationAmount" id="registrationAmount" oninput="registrationAmountFilled()"/></td>
+        </tr>
+        <tr hidden>
+            <td>FMES - GST:</td>
+            <td><input type="text" name="fmesGST" id="fmesGST" style="background-color: #D3D3D3; border: 0"/></td>
+        </tr>
+        <tr hidden>
+            <td>CCAvenue Transaction fees - GST :</td>
+            <td><input type="text" name="txFeesGST" id="txFeesGST" style="background-color: #D3D3D3; border: 0"/></td>
+        </tr>
+        <tr hidden>
+            <td>CCAvenue Transaction fees :</td>
+            <td><input type="text" name="txFee" id="txFee" style="background-color: #D3D3D3; border: 0"/></td>
+        </tr>
+        <tr>
+            <td>Total amount (inclusive of payment gateway charges & 18% GST):</td>
+            <td><input type="text" name="amount" id="amount" readonly style="background-color: #D3D3D3; border: 0"/></td>
+        </tr>
+    </table>
+    <br/>
+    <center><INPUT TYPE="submit" id="submit" value="Proceed to payment" class="btn btn-primary btn-lg"></center>
+    <input type="text" name="language" value="en" hidden/>
+    <input type="text" name="integration_type" value="iframe_normal" hidden/>
+    <input type="text" name="redirect_url" id="redirect_url" hidden/>
+    <input type="text" name="cancel_url" id="cancel_url" hidden/>
+    <input type="text" name="tid" id="tid" hidden/>
+    <input type="text" name="merchant_id" value="146983" hidden/>
+    <input type="text" name="order_id" id="order_id" hidden/>
+</form>
+</body>
+</html>
